@@ -60,20 +60,61 @@ app.set('view engine', 'ejs');
 // Tell Express where to find templates
 app.set('views', path.join(__dirname, 'src/views'));
 
-// Routes
 /**
- * Routes
+ * Configure Express middleware
  */
+
+// Middleware to make NODE_ENV available to all templates
+app.use((req, res, next) => {
+    res.locals.NODE_ENV = NODE_ENV.toLowerCase() || 'production';
+
+    // Continue to the next middleware or route handler
+    next();
+});
+
+app.use((req, res, next) => {
+    // Skip logging for routes that start with /. (like /.well-known/)
+    if (!req.path.startsWith('/.')) {
+       // console.log(`${req.method} ${req.url}`);
+    }
+    next(); // Pass control to the next middleware or route
+});
+
+// Middleware to add global data to all templates
+app.use((req, res, next) => {
+    // Add current year for copyright
+    res.locals.currentYear = new Date().getFullYear();
+
+    next();
+});
+
+// Global middleware for time-based greeting
+app.use((req, res, next) => {
+    const currentHour = new Date().getHours();
+    res.render('home', { title });
+
+    /**
+     * Create logic to set different greetings based on the current hour.
+     * Use res.locals.greeting to store the greeting message.
+     * Hint: morning (before 12), afternoon (12-17), evening (after 17)
+     */
+
+    next();
+});
+
+
+// Routes
+// Home
 app.get('/', (req, res) => {
     const title = 'Welcome Home';
     res.render('home', { title });
 });
-
+// about
 app.get('/about', (req, res) => {
     const title = 'About Me';
     res.render('about', { title });
 });
-
+// product
 app.get('/products', (req, res) => {
     const title = 'Our Products';
     res.render('products', { title });
