@@ -91,16 +91,59 @@ app.use((req, res, next) => {
 // Global middleware for time-based greeting
 app.use((req, res, next) => {
     const currentHour = new Date().getHours();
-    res.render('home', { title });
 
-    /**
-     * Create logic to set different greetings based on the current hour.
-     * Use res.locals.greeting to store the greeting message.
-     * Hint: morning (before 12), afternoon (12-17), evening (after 17)
-     */
+    if (currentHour <= 12) {
+        res.locals.greeting = "Good Morning!"
+    }
+    else if (12 < currentHour < 17) {
+        res.locals.greeting = "Good Afternoon!"
+    }
+    else {
+        res.locals.greeting = "Good Night!"
+    }
 
     next();
 });
+
+// Global middleware for random theme selection
+app.use((req, res, next) => {
+    const themes = ['blue-theme', 'green-theme', 'red-theme'];
+    // used chatGPT for reminders on array methods
+    const num = Math.floor(Math.random() * themes.length);
+    
+    const randomTheme = themes[num]
+    
+    res.locals.bodyClass = randomTheme;
+
+    next();
+});
+
+// Global middleware to share query parameters with templates
+app.use((req, res, next) => {
+    // Make req.query available to all templates for debugging and conditional rendering
+    res.locals.queryParams = req.query || {};
+
+    next();
+});
+
+// Route-specific middleware that sets custom headers
+const addDemoHeaders = (req, res, next) => {
+    // Your task: Set custom headers using res.setHeader()
+    res.setHeader("X-Demo-Page", "true");
+    // Add a header called 'X-Demo-Page' with value 'true'
+    res.setHeader("X-Middleware-Demo", "Wut up Fam")
+    // Add a header called 'X-Middleware-Demo' with any message you want
+
+    next();
+};
+
+// Demo page route with header middleware
+app.get('/demo', addDemoHeaders, (req, res) => {
+    res.render('demo', {
+        title: 'Middleware Demo Page'
+    });
+});
+
 
 
 // Routes

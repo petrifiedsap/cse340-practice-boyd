@@ -1,5 +1,4 @@
-<%- include('partials/head') %>
-<%- include('partials/nav') %>
+<%- include('partials/header') %>
 
 <main>
     <div class="course-header">
@@ -33,5 +32,6 @@
     <div class="navigation">
         <p><a href="/catalog">&larr; Back to Course Catalog</a></p>
     </div>
+    <p><%- JSON.stringify(queryParams) %></p>
 </main>
 <%- include('partials/footer') %>
