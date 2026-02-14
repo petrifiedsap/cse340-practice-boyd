@@ -12,7 +12,7 @@ const demoPage = (req, res) => {
 };
 
 const testErrorPage = (req, res, next) => {
-    const err = new Error('This is a test error');
+    const err = new Error('This is a test error. Def-defnitely a test error.');
     err.status = 500;
     next(err);
 };
