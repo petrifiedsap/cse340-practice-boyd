@@ -6,9 +6,27 @@ import { catalogPage, courseDetailPage } from './catalog/catalog.js';
 import { homePage, aboutPage, demoPage, testErrorPage } from './index.js';
 import { facultyListPage, facultyDetailPage } from './faculty/faculty.js';
 
-
 // Create a new router instance
 const router = Router();
+
+// router middleware
+// Add catalog-specific styles to all catalog routes
+router.use('/catalog', (req, res, next) => {
+    res.addStyle('<link rel="stylesheet" href="/css/catalog.css">');
+    next();
+});
+
+// Add faculty-specific styles to all faculty routes
+router.use('/cfaculty', (req, res, next) => {
+    res.addStyle('<link rel="stylesheet" href="/css/faculty.css">');
+    next();
+});
+
+// Add catalog-specific styles to all catalog routes
+router.use('/', (req, res, next) => {
+    res.addStyle('<link rel="stylesheet" href="/css/main.css">');
+    next();
+});
 
 // route definitions
 // Home and basic pages
@@ -17,11 +35,11 @@ router.get('/about', aboutPage);
 
 // Course catalog routes
 router.get('/catalog', catalogPage);
-router.get('/catalog/:courseId', courseDetailPage);
+router.get('/catalog/:slugId', courseDetailPage);
 
 // Faculty routes
 router.get('/faculty', facultyListPage);
-router.get('/faculty/:facultyId', facultyDetailPage);
+router.get('/faculty/:facultySlug', facultyDetailPage);
 
 // Demo page with special middleware
 router.get('/demo', addDemoHeaders, demoPage);

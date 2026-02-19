@@ -12,11 +12,11 @@
     </div>
 
      <div class="faculty-list">
-        <% faculty.forEach(teacher => { %>
+        <% faculty.forEach(facultyMember => { %>
             <div class="faculty-card">
-                <h3><a href="/faculty/<%= teacher.id %>"><%= teacher.name %></a></h3>
-                <p class="faculty-title"><%= teacher.title %></p>
-                <p class="faculty-department"><%= teacher.department %></p>
+                <h3><a href="/faculty/<%= facultyMember.slug %>"><%= facultyMember.name %></a></h3>
+                <p class="faculty-title"><%= facultyMember.title %></p>
+                <p class="faculty-department"><%= facultyMember.department %></p>
             </div>
         <% }); %>
     </div>
