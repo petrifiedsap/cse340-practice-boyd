@@ -3,6 +3,7 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { setupDatabase, testConnection } from './src/models/setup.js';
+import { body, validationResult } from 'express-validator';
 
 // Import MVC components
 import routes from './src/controllers/routes.js';
