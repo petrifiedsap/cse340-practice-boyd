@@ -20,6 +20,7 @@ const registrationValidation = [
         .withMessage('Must be a valid email address'),
     body('emailConfirm')
         .trim()
+        .normalizeEmail()
         .custom((value, { req }) => value === req.body.email)
         .withMessage('Email addresses must match'),
     body('password')
@@ -51,7 +52,7 @@ const processRegistration = async (req, res) => {
 
     if (!errors.isEmpty()) {
         console.log(errors);
-        return  res.redirect('/register');
+        return  res.redirect('/registration');
     }
     // Extract validated data from request body
     const { name, email, password } = req.body;
@@ -61,7 +62,7 @@ const processRegistration = async (req, res) => {
         const exists = await emailExists(email);
         if (exists) {
             console.log('Email already registered');
-            return res.redirect('/register');
+            return res.redirect('/registration');
         }
 
         // Hash the password before saving to database
@@ -70,10 +71,10 @@ const processRegistration = async (req, res) => {
         // Save user to database with hashed password
         await saveUser(name, email, hashedPassword);
         console.log('User Saved');
-        res.redirect('/register/list');
+        res.redirect('/registration/list');
     } catch (error) {
             console.error('Error saving user', error);
-            res.redirect('/register');
+            res.redirect('/registration');
     }
 };
 
@@ -90,7 +91,7 @@ const showAllUsers = async (req, res) => {
         console.error('Error getting users array', error);
     }
 
-    res.render(forms/registration/list, {
+    res.render('forms/registration/list', {
         title: 'Registered Users',
         users
     });
